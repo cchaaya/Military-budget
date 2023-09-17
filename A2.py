@@ -13,7 +13,7 @@ import plotly.express as px
 
 """# Import Dataset"""
 
-df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+df = pd.read_csv(Military Expenditure.csv")
 
 df.head()
 
