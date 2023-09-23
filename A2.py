@@ -21,21 +21,27 @@ from streamlit_option_menu import option_menu
 # Menu bar
 selected = option_menu(
     menu_title = None,
-    options = [ "Data", "Total Spending", "Spending Over Time", "Percent Growth", "Interactive Map"],
+    options = [ "Data Overview", "Total Spending", "Spending Over Time", "Percent Growth", "Interactive Map"],
     menu_icon = "cast",
     icons = ['database-check', 'cash-coin', 'clock-history', 'graph-up-arrow', 'globe'],
     default_index = 0,
     orientation = "horizontal",
     styles = {"nav-link-selected":{"background-color":"red"}}
 )
+
+#import dataset:
+df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+# Add a sidebar
+st.sidebar.title("Selector")
+
 #-----------------------------------------------------------------------------#
 # Component1: Data
 
-if selected == "Data":
+if selected == "Data Overview":
     #"""# Import Dataset"""
     df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
     st.subheader("Dataset: ")
-    st.markdown('Countries data collected from 1960 to 2018 in Billions of USD')
+    st.markdown('Data collected from 1960 to 2018 for 264 countries (in Billions of USD)')
     # st.write(df.head())
 
     # """# Basic EDA & Data Cleaning"""
@@ -54,7 +60,6 @@ if selected == "Data":
     df1 = df['Total'] = numerical_columns.sum(axis=1)
     # st.write(df.head(5))
 
-
     #Conversion of Military Expenditure Columns to Billions and Rounding
     columns=[str(i) for i in list((range(1960,2019)))]
     columns=columns+["Total"]
@@ -69,14 +74,16 @@ if selected == "Data":
 
 
     #Selecting Top 20 Rows and Removing Unnecessary Columns in Military Expenditure Data
+    st.subheader("Subset Data: ")
     st.markdown('Selecting Top 20 Countries in Total Military Expenditure in Billions of USD')
     df2 = df1[:20]
     df3 = df2.drop(['Indicator Name', 'Code', 'Type'], axis=1)
     newdf = df3.reset_index(drop=True)
     st.write(newdf.head(20))
-
+    st.markdown('Limitation: No data reported from China and Russian Federation until 1989 & 1993')
 
 #-----------------------------------------------------------------------------#
+
 # """# Visualization
 # Component2: Total Spending
 if selected == "Total Spending":
@@ -87,7 +94,7 @@ if selected == "Total Spending":
     # assign total
     numerical_columns = df.select_dtypes(include=['int', 'float'])
     # Calculate the sum of numerical columns along axis 1
-    df1 = df['Total'] = numerical_columns.sum(axis=1)
+    df['Total'] = numerical_columns.sum(axis=1)
     #Conversion of Military Expenditure Columns to Billions and Rounding
     columns=[str(i) for i in list((range(1960,2019)))]
     columns=columns+["Total"]
@@ -95,16 +102,18 @@ if selected == "Total Spending":
         df[i]=df[i]/1.e+9
     df1=np.round(df, decimals=2)
     #Sorting and Filtering Military Expenditure Data for Countries
-    df1.sort_values(by=['Type','Total'],ascending=[False,False],inplace=True)
-    df1 = df1[df1['Type'].astype(str).str.contains("Country")]
+    df.sort_values(by=['Type','Total'],ascending=[False,False],inplace=True)
+    df = df[df['Type'].astype(str).str.contains("Country")]
+
     #Selecting Top 20 Rows and Removing Unnecessary Columns in Military Expenditure Data
-    df2 = df1[:20]
+    df2 = df[:20]
     df3 = df2.drop(['Indicator Name', 'Code', 'Type'], axis=1)
     newdf = df3.reset_index(drop=True)
 
    # Sort the DataFrame in ascending order by 'Total'
     df3_sorted = newdf.sort_values(by='Total', ascending=True)
-    # Create the bar plot using plotly.graph_objs
+
+      # Create the bar plot using plotly.graph_objs
     fig = go.Figure()
 
     # Add horizontal bar trace
@@ -118,7 +127,7 @@ if selected == "Total Spending":
 
     # Customize the layout
     fig.update_layout(
-        title='Total Military Spending from 1960 to 2018 (Ascending Order)',
+        title='Total Military Spending from 1960 to 2018',
         xaxis_title='Total in billions USD',
         yaxis_title='Countries',
         xaxis_range=[0, df3_sorted['Total'].max() * 1.1],  # Adjust the x-axis range for labels
@@ -127,7 +136,7 @@ if selected == "Total Spending":
     # Show the figure within Streamlit
     st.plotly_chart(fig)
 
-    # Create the pie chart using plotly.graph_objs
+     # Create the pie chart using plotly.graph_objs
     fig = go.Figure()
 
     # Add a pie trace
@@ -145,6 +154,9 @@ if selected == "Total Spending":
 
     # Show the figure within Streamlit
     st.plotly_chart(fig)
+    st.subheader("Insights: ")
+    st.markdown("*The highest spending country on Military since 1960 is USA with more than USD17 Trillion.") 
+    st.markdown("*The total spending on Military in USA constitute almost half the spending of the Sum of the other 19 countries.")
 
 #-----------------------------------------------------------------------------#
 # Component3: Spending Over Time
@@ -156,51 +168,90 @@ if selected == "Spending Over Time":
     # assign total
     numerical_columns = df.select_dtypes(include=['int', 'float'])
     # Calculate the sum of numerical columns along axis 1
-    df1 = df['Total'] = numerical_columns.sum(axis=1)
+    df['Total'] = numerical_columns.sum(axis=1)
     #Conversion of Military Expenditure Columns to Billions and Rounding
     columns=[str(i) for i in list((range(1960,2019)))]
     columns=columns+["Total"]
     for i in columns:
         df[i]=df[i]/1.e+9
-    df1=np.round(df, decimals=2)
+    df=np.round(df, decimals=2)
     #Sorting and Filtering Military Expenditure Data for Countries
-    df1.sort_values(by=['Type','Total'],ascending=[False,False],inplace=True)
-    df1 = df1[df1['Type'].astype(str).str.contains("Country")]
+    df.sort_values(by=['Type','Total'],ascending=[False,False],inplace=True)
+    df = df[df['Type'].astype(str).str.contains("Country")]
     #Selecting Top 20 Rows and Removing Unnecessary Columns in Military Expenditure Data
-    df2 = df1[:20]
+    df2 = df[:20]
     df3 = df2.drop(['Indicator Name', 'Code', 'Type'], axis=1)
     newdf = df3.reset_index(drop=True)
 
    # Sort the DataFrame in ascending order by 'Total'
     df3_sorted = newdf.sort_values(by='Total', ascending=True)
 
-
     # """- Create line Plot to show the Military Spending over time by Country"""
-
     # # Create a list of columns to exclude ('Total')
     columns_to_exclude = ['Total']
 
-    # # Select all columns except those in 'columns_to_exclude'
+    ## Select all columns except those in 'columns_to_exclude'
     selected_columns = [col for col in newdf.columns if col not in columns_to_exclude]
 
-    # # Create a new DataFrame with the selected columns
+    ## Create a new DataFrame with the selected columns
     df_selected = newdf[selected_columns]
 
-    # # Melt the DataFrame to long format
+    ## Melt the DataFrame to long format
     df_melted = pd.melt(df_selected, id_vars=['Name'], var_name='Year', value_name='Spending')
+    
+    # Start filter
+    st.sidebar.subheader("Filter Data")
+    # Define the list of years from 1960 to 2018
+    years = [str(year) for year in range(1960, 2019)]
+
+    # Create a range slider widget for selecting a range of years
+    selected_years_range = st.sidebar.slider("Select Years Range", min_value=1960, max_value=2018, value=(1960, 2018), step=1)
+
+    # Filter the data based on the selected years range
+    filtered_data = df_melted[(df_melted['Year'].astype(int) >= selected_years_range[0]) & (df_melted['Year'].astype(int) <= selected_years_range[1])].reset_index(drop=True)
+
+
+    unique_countries = filtered_data['Name'].unique()
+    # Create a dictionary to store the state of each checkbox
+    checkbox_states = {}
+    # Create a checkbox to toggle the dropdown visibility
+    show_dropdown = st.sidebar.checkbox("Countries List")
+    # Only show the dropdown when the checkbox is selected
+    if show_dropdown:
+    # Loop through unique country names and create checkboxes
+        for country in unique_countries:
+            checkbox_states[country] = st.sidebar.checkbox(country, value=True, key=f"checkbox_{country}")
+    
+    else:
+        # If the checkbox is not selected, set selected_countries to an empty list
+        selected_countries = []
+
+    # End filter
 
     # Create the interactive line chart using plotly.graph_objs
     fig = go.Figure()
 
-    # Create lines for each country
-    for country in df_melted['Name'].unique():
-        data_country = df_melted[df_melted['Name'] == country]
-        fig.add_trace(go.Scatter(
-            x=data_country['Year'],
-            y=data_country['Spending'],
-            mode='lines',
-            name=country,
-        ))
+    # Create lines for each country and highlight the highest point
+    for country in filtered_data['Name'].unique():
+        if country in checkbox_states and checkbox_states[country]:
+            data_country = filtered_data[filtered_data['Name'] == country]
+            highest_point = data_country[data_country['Spending'] == data_country['Spending'].max()]  # Find the highest point
+            fig.add_trace(go.Scatter(
+                x=data_country['Year'],
+                y=data_country['Spending'],
+                mode='lines',
+                name=country,
+            ))
+
+            # Highlight the highest point with a marker without legend entry
+            fig.add_trace(go.Scatter(
+                x=highest_point['Year'],
+                y=highest_point['Spending'],
+                mode='markers',
+                marker=dict(size=8, color='red'),
+                name=country,
+                showlegend=False,  # Do not include the highest point in the legend
+            ))
 
     # Customize the layout
     fig.update_layout(
@@ -211,9 +262,13 @@ if selected == "Spending Over Time":
         legend_title_text='Country',
     )
 
-    # Show the figure within Streamlit
+     # Show the figure within Streamlit
     st.plotly_chart(fig)
-
+    # Highlights
+    st.subheader("Insights: ")
+    st.markdown("*The country with the highest military budget over the years is the USA. The budget started increasing significantly after the year 2000. The largest budget in the history of the USA was allocated in 2011, totaling approximately USD 711 billion.") 
+    st.markdown("*China's budget began to increase significantly after the year 2000, reaching its peak in 2018 at approximately USD 250 billion.")
+    st.markdown("*The next largest budgets were observed in Russia and Saudi Arabia in 2013 and 2015, each totaling around USD 88 billion.")
 #-----------------------------------------------------------------------------#
 #"""- Total military spendings in percentage from 1960 to 2018"""
 # Component4: Percent Growth
@@ -225,109 +280,99 @@ if selected == "Percent Growth":
     # assign total
     numerical_columns = df.select_dtypes(include=['int', 'float'])
     # Calculate the sum of numerical columns along axis 1
-    df1 = df['Total'] = numerical_columns.sum(axis=1)
+    df['Total'] = numerical_columns.sum(axis=1)
     #Conversion of Military Expenditure Columns to Billions and Rounding
     columns=[str(i) for i in list((range(1960,2019)))]
     columns=columns+["Total"]
     for i in columns:
         df[i]=df[i]/1.e+9
-    df1=np.round(df, decimals=2)
+    df=np.round(df, decimals=2)
     #Sorting and Filtering Military Expenditure Data for Countries
-    df1.sort_values(by=['Type','Total'],ascending=[False,False],inplace=True)
-    df1 = df1[df1['Type'].astype(str).str.contains("Country")]
+    df.sort_values(by=['Type','Total'],ascending=[False,False],inplace=True)
+    df = df[df['Type'].astype(str).str.contains("Country")]
     #Selecting Top 20 Rows and Removing Unnecessary Columns in Military Expenditure Data
-    df2 = df1[:20]
+    df2 = df[:20]
     df3 = df2.drop(['Indicator Name', 'Code', 'Type'], axis=1)
     newdf = df3.reset_index(drop=True)
 
    # Sort the DataFrame in ascending order by 'Total'
     df3_sorted = newdf.sort_values(by='Total', ascending=True)
-
-    # """- Create an animated scatter plot to show the percentage growth of spending on military budget by country over the years"""
-
-    # Calculate the percentage growth
-    newdf['Percentage growth'] = ((newdf['2018'] - newdf['1960']) / newdf['1960']) * 100
-
-    # Reshape the data
-    melted_df = pd.melt(
-        newdf,
-        id_vars=['Name', 'Percentage growth'],
-        value_vars=[str(year) for year in range(1960, 2019)],
-        var_name='Year',
-        value_name='Spending',
-    )
- 
-    import plotly.graph_objs as go
-
-    # ...
-
-    # Create the figure
+   
+    #   # Create the figure
     fig = go.Figure()
 
-    # Add scatter points for each year
-    for year in melted_df['Year'].unique():
-        data_year = melted_df[melted_df['Year'] == year]
-        scatter_trace = go.Scatter(
-            x=data_year['Name'],
-            y=data_year['Percentage growth'],
-            mode='markers',
-            name=str(year),
-            marker=dict(
-                size=data_year['Spending'],  # Size of markers based on spending
-                sizemode='diameter',
-                sizeref=0.1,
-                opacity=0.7,
-            ),
-        )
-        fig.add_trace(scatter_trace)
+    import plotly.graph_objs as go
+    import streamlit as st
+
+    # Calculate the percentage growth for each country in 10-year intervals
+    interval_years = [str(year) for year in range(1968, 2019, 10)]
+
+    # Create an empty dictionary to store checkbox states
+    checkbox_states = {}
+
+    # Create an empty list to store scatter traces
+    scatter_traces = []
+
+    # Initialize checkbox states
+    for i in range(len(interval_years) - 1):
+        start_year = int(interval_years[i])
+        end_year = int(interval_years[i + 1])
+        interval_name = f'Interval {start_year}-{end_year}'
+        checkbox_states[interval_name] = True
+
+    # Create a sidebar checkbox for each interval
+    st.sidebar.header("Hide/Show Intervals")
+    for interval_name in checkbox_states:
+        checkbox_states[interval_name] = st.sidebar.checkbox(interval_name, value=True, key=f"checkbox_{interval_name}")
+
+    # Create the scatter plot
+    for i in range(len(interval_years) - 1):
+        start_year = int(interval_years[i])
+        end_year = int(interval_years[i + 1])
+        interval_name = f'Interval {start_year}-{end_year}'
+
+        # Select the relevant columns for the interval
+        interval_columns = [str(year) for year in range(start_year, end_year + 1)]
+        interval_columns.append('Name')
+        data_interval = newdf[interval_columns]
+
+        # Check if both start and end year columns exist
+        if str(start_year) in data_interval.columns and str(end_year) in data_interval.columns:
+            # Calculate the percentage growth
+            data_interval['Percentage growth'] = ((data_interval[str(end_year)] - data_interval[str(start_year)]) / data_interval[str(start_year)]) * 100
+
+            # Create a scatter trace for the current interval if not hidden
+            if checkbox_states[interval_name]:
+                scatter_trace = go.Scatter(
+                    x=data_interval['Name'],
+                    y=data_interval['Percentage growth'],
+                    mode='markers',
+                    name=interval_name,
+                )
+
+                scatter_traces.append(scatter_trace)
+
+        else:
+            st.write(f"Skipping interval {start_year}-{end_year} due to missing columns")
+
+    # Create a Plotly figure for the scatter plot
+    scatter_fig = go.Figure(data=scatter_traces)
 
     # Customize the layout
-    fig.update_layout(
-        title='Spending Growth from 1960 to 2018 by Country',
-        xaxis=dict(title='Country', tickangle=45, type='category'),  # Ensure the 'Name' column is treated as categorical
-        yaxis=dict(title='Percentage Growth'),
-        showlegend=True,
+    scatter_fig.update_layout(
+        title='Percentage Growth by Country (10-Year Intervals)',
+        xaxis_title='Country',
+        yaxis_title='Percentage Growth',
     )
 
-    # Add animation frames
-    frames = [go.Frame(data=[go.Scatter(x=data_year['Name'], y=data_year['Percentage growth'])], name=str(year)) for year, data_year in melted_df.groupby('Year')]
-    fig.frames = frames
+    # Show the scatter plot within Streamlit
+    st.plotly_chart(scatter_fig)
+# Highlights
+    st.subheader("Insights: ")
+    st.markdown("*The highest percentage growth between 1968-1978 was Saudi Arabia.") 
+    st.markdown("*The highest percentage growth between 1998-2008 was Russia.")
+    st.markdown("*The highest percentage growth between 2008-2018 was China.")
 
-    # Add animation slider
-    fig.update_layout(
-        updatemenus=[
-            {
-                'buttons': [
-                    {
-                        'args': [None, {'frame': {'duration': 1000, 'redraw': True}, 'fromcurrent': True}],
-                        'label': 'Play',
-                        'method': 'animate',
-                    },
-                    {
-                        'args': [[None], {'frame': {'duration': 0, 'redraw': True}, 'mode': 'immediate', 'transition': {'duration': 0}}],
-                        'label': 'Pause',
-                        'method': 'animate',
-                    },
-                ],
-                'direction': 'left',
-                'pad': {'r': 10, 't': 87},
-                'showactive': False,
-                'type': 'buttons',
-                'x': 0.1,
-                'xanchor': 'right',
-                'y': 0,
-                'yanchor': 'top',
-            }
-        ],
-    )
-
-    # Show the figure within Streamlit
-    st.plotly_chart(fig)
-
-    # # """- This plot is showing the growth in military spending from 1960 to 2018
-    # # - The buble size reprents the spending volume by country throught the years
-    # # - we didnt have data for china until 1989. However, since then the percentage growth of china is around 2093
-    # # - We didnt have data for Russia until 1993. Howeverm since then the percentage growth is 690
 #-----------------------------------------------------------------------------#
 #"""- Total military spendings in percentage from 1960 to 2018"""
 # Component5: Interactive Map
