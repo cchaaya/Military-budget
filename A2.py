@@ -301,9 +301,6 @@ if selected == "Percent Growth":
     #   # Create the figure
     fig = go.Figure()
 
-    import plotly.graph_objs as go
-    import streamlit as st
-
     # Calculate the percentage growth for each country in 10-year intervals
     interval_years = [str(year) for year in range(1968, 2019, 10)]
 
