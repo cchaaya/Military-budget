@@ -14,7 +14,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-sys.path.insert(1, r"C:\Users\OS\AppData\Local\Programs\Python\Python310\Lib\site-packages")
+#sys.path.insert(1, r"C:\Users\OS\AppData\Local\Programs\Python\Python310\Lib\site-packages")
 from streamlit_option_menu import option_menu
 #https://icons.getbootstrap.com/
 
@@ -30,7 +30,7 @@ selected = option_menu(
 )
 
 #import dataset:
-df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+df = pd.read_csv("Military Expenditure.csv")
 # Add a sidebar
 st.sidebar.title("Selector")
 
@@ -39,7 +39,7 @@ st.sidebar.title("Selector")
 
 if selected == "Data Overview":
     #"""# Import Dataset"""
-    df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+    df = pd.read_csv("Military Expenditure.csv")
     st.subheader("Dataset: ")
     st.markdown('Data collected from 1960 to 2018 for 264 countries (in Billions of USD)')
     # st.write(df.head())
@@ -88,7 +88,7 @@ if selected == "Data Overview":
 # Component2: Total Spending
 if selected == "Total Spending":
     #"""# Import Dataset"""
-    df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+    df = pd.read_csv("Military Expenditure.csv")
     #fill missing values
     df.fillna(0, inplace=True)
     # assign total
@@ -162,7 +162,7 @@ if selected == "Total Spending":
 # Component3: Spending Over Time
 if selected == "Spending Over Time":
     #"""# Import Dataset"""
-    df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+    df = pd.read_csv("Military Expenditure.csv")
     #fill missing values
     df.fillna(0, inplace=True)
     # assign total
@@ -274,7 +274,7 @@ if selected == "Spending Over Time":
 # Component4: Percent Growth
 if selected == "Percent Growth":
     #"""# Import Dataset"""
-    df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+    df = pd.read_csv("Military Expenditure.csv")
     #fill missing values
     df.fillna(0, inplace=True)
     # assign total
@@ -375,7 +375,7 @@ if selected == "Percent Growth":
 # Component5: Interactive Map
 if selected == "Interactive Map":
     #"""# Import Dataset"""
-    df = pd.read_csv(r"C:\Users\OS\Desktop\AUB\MSBA Courses\4- Fall 23-24\MSBA325-Data Visualization and communication\Assignmnent\A2\Military Expenditure.csv")
+    df = pd.read_csv("Military Expenditure.csv")
     #fill missing values
     df.fillna(0, inplace=True)
     # assign total
