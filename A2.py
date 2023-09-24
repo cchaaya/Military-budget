@@ -83,8 +83,8 @@ if selected == "Data Overview":
     st.markdown('Limitation: No data reported from China and Russian Federation until 1989 & 1993')
 
 #-----------------------------------------------------------------------------#
-
 # """# Visualization
+
 # Component2: Total Spending
 if selected == "Total Spending":
     #"""# Import Dataset"""
@@ -270,7 +270,6 @@ if selected == "Spending Over Time":
     st.markdown("*China's budget began to increase significantly after the year 2000, reaching its peak in 2018 at approximately USD 250 billion.")
     st.markdown("*The next largest budgets were observed in Russia and Saudi Arabia in 2013 and 2015, each totaling around USD 88 billion.")
 #-----------------------------------------------------------------------------#
-#"""- Total military spendings in percentage from 1960 to 2018"""
 # Component4: Percent Growth
 if selected == "Percent Growth":
     #"""# Import Dataset"""
@@ -371,7 +370,6 @@ if selected == "Percent Growth":
     st.markdown("*The highest percentage growth between 2008-2018 was China.")
 
 #-----------------------------------------------------------------------------#
-#"""- Total military spendings in percentage from 1960 to 2018"""
 # Component5: Interactive Map
 if selected == "Interactive Map":
     #"""# Import Dataset"""
