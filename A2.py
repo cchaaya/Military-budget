@@ -154,7 +154,7 @@ if selected == "Total Spending":
 
     # Show the figure within Streamlit
     st.plotly_chart(fig)
-    st.subheader("Insights: ")
+    st.subheader("Observation: ")
     st.markdown("*The highest spending country on Military since 1960 is USA with more than USD17 Trillion.") 
     st.markdown("*The total spending on Military in USA constitute almost half the spending of the Sum of the other 19 countries.")
 
@@ -265,7 +265,7 @@ if selected == "Spending Over Time":
      # Show the figure within Streamlit
     st.plotly_chart(fig)
     # Highlights
-    st.subheader("Insights: ")
+    st.subheader("Observation: ")
     st.markdown("*The country with the highest military budget over the years is the USA. The budget started increasing significantly after the year 2000. The largest budget in the history of the USA was allocated in 2011, totaling approximately USD 711 billion.") 
     st.markdown("*China's budget began to increase significantly after the year 2000, reaching its peak in 2018 at approximately USD 250 billion.")
     st.markdown("*The next largest budgets were observed in Russia and Saudi Arabia in 2013 and 2015, each totaling around USD 88 billion.")
@@ -365,7 +365,7 @@ if selected == "Percent Growth":
     # Show the scatter plot within Streamlit
     st.plotly_chart(scatter_fig)
 # Highlights
-    st.subheader("Insights: ")
+    st.subheader("Observation: ")
     st.markdown("*The highest percentage growth between 1968-1978 was Saudi Arabia.") 
     st.markdown("*The highest percentage growth between 1998-2008 was Russia.")
     st.markdown("*The highest percentage growth between 2008-2018 was China.")
