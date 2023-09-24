@@ -412,3 +412,6 @@ if selected == "Interactive Map":
 
     # Show the visualization
     st.plotly_chart(fig)
+    st.subheader("Observation: ")
+    st.markdown("*The circles in the MAP are clearning showing the size of the military budget allocated in 2018 in Both USA & China.") 
+    st.markdown("*The highest growth in the budget in 2018 is showing in Saudi Arabia which became the 3 countries in the world ranking after USA and China.")
